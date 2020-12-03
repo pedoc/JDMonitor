@@ -43,3 +43,7 @@ MailOptions 配置说明
 | MaxDegreeOfParallelism  |  并行同步任务数，建议为 cpu核数-1或保持为1 |
 | PageLoadTimeout  |  页面加载超时时间 |
 | UseCssSelector  |  使用css选择器模式定位页面价格等关键元素，如果未false，则表示使用XPath模式，此模式兼容性不是很好 |
+
+示例图
+![1](https://github.com/pedoc/JDMonitor/blob/master/Example/main.png)
+![2](https://github.com/pedoc/JDMonitor/blob/master/Example/history.png)
