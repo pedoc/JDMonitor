@@ -73,8 +73,13 @@ namespace JDMonitor
             return new Options();
         }
 
-        public bool SendEmail(string subject,string content)
+        public bool SendEmail(string subject,string content,Action<string> logger)
         {
+            if (!MailOptions.IsValid())
+            {
+                logger?.Invoke("邮件配置无效");
+                return false;
+            }
             try
             {
                 var message = new MimeMessage();
@@ -113,5 +118,14 @@ namespace JDMonitor
         public string MailHost { get; set; } = "smtp.qq.com";
         public int MailPort { get; set; } = 465;
         public string MailCode { get; set; } = "";
+
+        public bool IsValid()
+        {
+            return
+                !string.IsNullOrEmpty(Sender)
+                && !string.IsNullOrEmpty(Receiver)
+                && !string.IsNullOrEmpty(MailHost)
+                && !string.IsNullOrEmpty(MailCode);
+        }
     }
 }

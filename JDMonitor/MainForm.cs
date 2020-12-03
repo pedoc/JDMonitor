@@ -65,7 +65,7 @@ namespace JDMonitor
                 _timer.Change(Timeout.Infinite, Timeout.Infinite);
 
                 using var db = _options.GetDbConnection();
-                var records = db.Select<Record>(r => r.IsEnable);
+                var records = db.Select<Record>(r => r.IsEnable&&!r.IsDeleted);
                 if (!records.Any())
                 {
                     UpdateLog($"当前没有任何任务，{DateTime.Now}");
@@ -265,7 +265,7 @@ namespace JDMonitor
 
         private void SendEmail(string subject, string content)
         {
-            var result = _options.SendEmail(subject, content);
+            var result = _options.SendEmail(subject, content,UpdateLog);
             using var db = _options.GetDbConnection();
             db.Insert<Mail>(new Mail()
             {
@@ -286,7 +286,8 @@ namespace JDMonitor
 历史最低={priceStatView.Min}
 历史平均={priceStatView.Avg}
 ";
-            var result = _options.SendEmail(subject, content);
+            var result = _options.SendEmail(subject, content,UpdateLog);
+            if (!result) UpdateLog("发送邮件失败，请检查配置");
             using var db = _options.GetDbConnection();
             db.Insert<Mail>(new Mail()
             {
